@@ -1,0 +1,14 @@
+﻿<Application x:Class="SmartCardReader.Windows.WPF.App"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:local="clr-namespace:SmartCardExplorer.Windows.WPF"
+			 StartupUri="MainWindow.xaml">
+	<Application.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="Strings/Strings.EN.xaml" />
+				<ResourceDictionary Source="Themes/Styles.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Application.Resources>
+</Application>
