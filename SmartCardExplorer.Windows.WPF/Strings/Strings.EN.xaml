@@ -5,5 +5,14 @@
 	<s:String x:Key="Title">SmartCard Explorer</s:String>
 	<s:String x:Key="Home">Home</s:String>
 	<s:String x:Key="General">General</s:String>
-
+	<s:String x:Key="CardReader">Card Reader</s:String>
+	<s:String x:Key="File">File</s:String>
+	<s:String x:Key="Exit">Exit</s:String>
+	<s:String x:Key="Edit">Edit</s:String>
+	<s:String x:Key="Cut">Cut</s:String>
+	<s:String x:Key="Copy">Copy</s:String>
+	<s:String x:Key="Paste">Paste</s:String>
+	<s:String x:Key="Help">Help</s:String>
+	<s:String x:Key="Ready">Ready</s:String>
+	
 </ResourceDictionary>

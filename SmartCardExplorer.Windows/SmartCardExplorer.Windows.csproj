@@ -32,8 +32,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.5.11\lib\net45\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -45,7 +54,9 @@
     <Compile Include="Card.cs" />
     <Compile Include="CardReader.cs" />
     <Compile Include="CardReaderHost.cs" />
+    <Compile Include="SCardInterface.Attributes.cs" />
     <Compile Include="SCardInterface.Errors.cs" />
+    <Compile Include="SCardInterface.File.cs" />
     <Compile Include="SCardInterface.Native.cs" />
     <Compile Include="SCardInterface.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -55,6 +66,9 @@
       <Project>{eab4e37e-ffc1-4785-bfec-5cdacba6e385}</Project>
       <Name>SmartCardExplorer</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

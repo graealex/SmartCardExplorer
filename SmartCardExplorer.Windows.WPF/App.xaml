@@ -9,6 +9,8 @@
 				<ResourceDictionary Source="Strings/Strings.EN.xaml" />
 				<ResourceDictionary Source="Themes/Styles.xaml" />
 			</ResourceDictionary.MergedDictionaries>
+			<local:BitmapToImageSourceConverter x:Key="BitmapToImageSourceConverter" />
+			<local:EnumerateConverter x:Key="EnumerateConverter" />
 		</ResourceDictionary>
 	</Application.Resources>
 </Application>

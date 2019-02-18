@@ -8,40 +8,88 @@
 		xmlns:SmartCardReaderWindows="clr-namespace:SmartCardExplorer.Windows;assembly=SmartCardExplorer.Windows"		
 		mc:Ignorable="d"
 		SizeToContent="WidthAndHeight"
+		ResizeMode="CanResizeWithGrip"
 		Style="{StaticResource {x:Type Window}}"
 		Title="{DynamicResource Title}"
 		Loaded="OnWindowLoaded"
 		StateChanged="OnWindowStateChanged" Closing="OnClosing" Closed="OnClosed">
-	<Grid MinWidth="900" MinHeight="600" Panel.ZIndex="0">
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="1*" />
-			<ColumnDefinition Width="5" />
-			<ColumnDefinition Width="2*" />
-		</Grid.ColumnDefinitions>
+	<Window.Resources>
+	</Window.Resources>
+	<DockPanel LastChildFill="True">
+		<Menu DockPanel.Dock="Top">
+			<Menu.ItemsPanel>
+				<ItemsPanelTemplate>
+					<DockPanel HorizontalAlignment="Stretch"/>
+				</ItemsPanelTemplate>
+			</Menu.ItemsPanel>
+			<MenuItem Header="{DynamicResource File}">
+				<MenuItem Header="{DynamicResource Exit}"/>
+			</MenuItem>
+			<MenuItem Header="{DynamicResource Edit}">
+				<MenuItem Header="{DynamicResource Cut}"/>
+				<MenuItem Header="{DynamicResource Copy}"/>
+				<MenuItem Header="{DynamicResource Paste}"/>
+			</MenuItem>
+			<MenuItem Header="{DynamicResource Help}" IsEnabled="True" HorizontalAlignment="Right"/>
+		</Menu>
+		<StatusBar DockPanel.Dock="Bottom">
+			<StatusBarItem>
+				<TextBlock Name="StatusText" Text="{DynamicResource Ready}"></TextBlock>
+			</StatusBarItem>
+			<StatusBarItem Width="250" HorizontalAlignment="Left" HorizontalContentAlignment="Stretch" Visibility="Hidden">
+				<ProgressBar x:Name="ProgressBarMain" IsIndeterminate="True" Height="15" />
+			</StatusBarItem>
+		</StatusBar>
+		<Grid MinWidth="900" MinHeight="600" Panel.ZIndex="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,3,3,0">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="1*" />
+				<ColumnDefinition Width="5" />
+				<ColumnDefinition Width="2*" />
+			</Grid.ColumnDefinitions>
 
-		<TreeView Name="MainTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0">
-			<TreeView.Resources>
-				<HierarchicalDataTemplate DataType="{x:Type SmartCardReaderWindows:CardReader}" ItemsSource="{Binding Path=Card}">
-					<TextBlock Text="{Binding Name}" />
-
-					<HierarchicalDataTemplate.ItemTemplate>
-						<HierarchicalDataTemplate DataType="{x:Type SmartCardReaderWindows:Card}" ItemsSource="{Binding Interfaces}">
+			<TreeView Name="MainTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" SelectedItemChanged="OnTreeViewSelectedItemChanged">
+				<TreeView.Resources>
+					<HierarchicalDataTemplate DataType="{x:Type SmartCardReaderWindows:CardReader}"
+											  ItemsSource="{Binding Path=Card, Converter={StaticResource EnumerateConverter}}">
+						<StackPanel Orientation="Horizontal" Name="myPanel">
+							<Image x:Name="CardReaderIcon" Width="16" Height="16" Margin="0,0,5,0"
+									   Source="{Binding Icon, Converter={StaticResource BitmapToImageSourceConverter}}" />
 							<TextBlock Text="{Binding Name}" />
-						</HierarchicalDataTemplate>
-					</HierarchicalDataTemplate.ItemTemplate>
-				</HierarchicalDataTemplate>
-			</TreeView.Resources>
-		</TreeView>
-		<GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch"/>
-		<ScrollViewer VerticalScrollBarVisibility="Visible" PanningMode="VerticalOnly" Grid.Column="2">
-			<StackPanel Name="MainStackPanel">
-				<Border BorderBrush="Black" BorderThickness="1" Height="100"/>
-				<Border BorderBrush="Black" BorderThickness="1" Height="100"/>
-				<Border BorderBrush="Black" BorderThickness="1" Height="100"/>
-				<Border BorderBrush="Black" BorderThickness="1" Height="100"/>
-				<Border BorderBrush="Black" BorderThickness="1" Height="100"/>
-				<Border BorderBrush="Black" BorderThickness="1" Height="100"/>
-			</StackPanel>
-		</ScrollViewer>
-	</Grid>
+						</StackPanel>
+						<HierarchicalDataTemplate.ItemTemplate>
+							<HierarchicalDataTemplate DataType="{x:Type SmartCardReaderWindows:Card}" ItemsSource="{Binding Interfaces}">
+								<TextBlock Text="{Binding Name}" />
+							</HierarchicalDataTemplate>
+						</HierarchicalDataTemplate.ItemTemplate>
+					</HierarchicalDataTemplate>
+				</TreeView.Resources>
+			</TreeView>
+			<GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch"/>
+			<TabControl  Grid.Column="2" Grid.Row="1" TabStripPlacement="Top" Margin="0">
+				<TabItem Header="Example">
+				</TabItem>
+				<TabItem Header="Example" IsSelected="True">
+					<ScrollViewer VerticalScrollBarVisibility="Visible" PanningMode="VerticalOnly" Grid.Column="2" >
+						<StackPanel Name="MainStackPanel">
+							<Expander Header="{DynamicResource CardReader}" IsExpanded="True">
+								<local:CardReaderProperties x:Name="CardReaderProperties">
+
+								</local:CardReaderProperties>
+							</Expander>
+							<Expander Header="Appearance" IsExpanded="False">
+							</Expander>
+							<Expander Header="Appearance" IsExpanded="False">
+							</Expander>
+							<Expander Header="Appearance" IsExpanded="False">
+							</Expander>
+						</StackPanel>
+					</ScrollViewer>
+				</TabItem>
+				<TabItem Header="Example">
+				</TabItem>
+				<TabItem Header="Example">
+				</TabItem>
+			</TabControl>
+		</Grid>
+	</DockPanel>
 </Window>

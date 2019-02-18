@@ -5,16 +5,24 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
+using NLog;
 
 namespace SmartCardExplorer.Windows
 {
 	public class CardReader : INotifyPropertyChanged
 	{
+		public static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+
 		private SCardInterface sCardInterface;
 		private string readerName;
 		private string deviceInstanceId;
+		private string state;
+		private Image icon;
+		private string atr;
+		private Dictionary<string, string> readerProperties;
 
-		private ObservableCollection<Card> cards;
+		private ObservableCollection<Card> cards = new ObservableCollection<Card>();
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
@@ -22,15 +30,24 @@ namespace SmartCardExplorer.Windows
 		{
 			this.sCardInterface = sCardInterface;
 			this.readerName = readerName;
-
-			FillCardReader();
 		}
 
-		private void FillCardReader()
+		public void UpdateCardReader()
 		{
 			deviceInstanceId = sCardInterface.GetReaderDeviceInstanceId(readerName);
 
-			cards = new ObservableCollection<Card>();
+			icon = sCardInterface.GetReaderIcon(readerName);
+
+			try
+			{
+				readerProperties = sCardInterface.GetReaderProperties(readerName);
+			}
+			catch (Exception ex)
+			{
+				// Non-critical
+				Logger.Warn(ex);
+			}
+
 			cards.Add(new Card());
 		}
 
@@ -44,9 +61,24 @@ namespace SmartCardExplorer.Windows
 			get { return deviceInstanceId; }
 		}
 
+		public IDictionary<string, string> Properties
+		{
+			get { return readerProperties; }
+		}
+
 		public override string ToString()
 		{
 			return readerName;
+		}
+
+		public Image Icon
+		{
+			get { return icon; }
+		}
+
+		public string State
+		{
+			get { return state; }
 		}
 
 		public IList<Card> Cards
@@ -56,7 +88,12 @@ namespace SmartCardExplorer.Windows
 
 		public Card Card
 		{
-			get { return cards[0]; }
+			get { return ((cards != null) && (cards.Count > 0)) ? cards[0] : null; }
+		}
+
+		public string CardATR
+		{
+			get { return atr; }
 		}
 	}
 }

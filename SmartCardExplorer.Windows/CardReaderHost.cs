@@ -9,7 +9,7 @@ using SmartCardExplorer;
 
 namespace SmartCardExplorer.Windows
 {
-	public class CardReaderHost : INotifyPropertyChanged
+	public class CardReaderHost : INotifyPropertyChanged, IDisposable
 	{
 		private SCardInterface sCardInterface;
 		private ObservableCollection<CardReader> cardReaders;
@@ -21,8 +21,6 @@ namespace SmartCardExplorer.Windows
 			this.sCardInterface = sCardInterface;
 			sCardInterface.EstablishContext(SCardInterface.SCOPE.User);
 			cardReaders = new ObservableCollection<CardReader>();
-
-			FillCardReaders();
 		}
 
 		public static CardReaderHost GetCardReaderHost()
@@ -32,32 +30,35 @@ namespace SmartCardExplorer.Windows
 			return new CardReaderHost(sCardInterface);
 		}
 
-		private void FillCardReaders()
+		public void UpdateCardReaders()
 		{
-			string[] readerNames = sCardInterface.ListReaders();
-
-			cardReaders.Clear();
-
-			foreach (string readerName in readerNames)
+			try
 			{
-				CardReader cardReader = new CardReader(sCardInterface, readerName);
-				cardReaders.Add(cardReader);
+				string[] readerNames = sCardInterface.ListReaders();
+
+				cardReaders.Clear();
+
+				foreach (string readerName in readerNames)
+				{
+					CardReader cardReader = new CardReader(sCardInterface, readerName);
+					cardReaders.Add(cardReader);
+
+					cardReader.UpdateCardReader();
+				}
+			}
+			catch (Exception ex)
+			{
+				throw;
 			}
 		}
 
-		public void OnCardReaderAdded()
+		public void Dispose()
 		{
-			OnCardReadersChanged();
-		}
-
-		public void OnCardReaderRemoved()
-		{
-			OnCardReadersChanged();
-		}
-
-		public void OnCardReadersChanged()
-		{
-			FillCardReaders();
+			if (sCardInterface != null)
+			{
+				sCardInterface.Dispose();
+				sCardInterface = null;
+			}
 		}
 
 		public IList<CardReader> CardReaders
